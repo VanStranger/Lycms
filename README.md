@@ -1,2 +1,2 @@
-# lyphp
-a php mvc
+# lycms
+cms based on Lyphp

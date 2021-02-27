@@ -1,5 +1,5 @@
 <?php
-namespace application\index\model;
+namespace application\install\model;
 use ly\lib\Model;
 class Love extends Model
 {
