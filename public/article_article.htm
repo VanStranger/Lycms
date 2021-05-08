@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{dede:field.title/}_{dede:global.cfg_webname/}</title>
+<meta name="keywords" content="{dede:field.keywords/}" />
+<meta name="description" content="{dede:field.description function='html2text(@me)'/}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{dede:global.cfg_cmspath/}/skin/css/base.css" rel="stylesheet">
+<link href="{dede:global.cfg_cmspath/}/skin/css/m.css" rel="stylesheet">
+<script src="{dede:global.cfg_cmspath/}/skin/js/jquery-1.8.3.min.js" ></script>
+<script src="{dede:global.cfg_cmspath/}/skin/js/comm.js"></script>
+<!--[if lt IE 9]>
+<script src="{dede:global.cfg_cmspath/}/skin/js/modernizr.js"></script>
+<![endif]-->
+</head>
+<body>
+<!--top begin--> 
+{dede:include filename="head.htm"/} 
+<!--top end-->
+<article> 
+  <!--lbox begin-->
+  <div class="lbox">
+    <div class="ad whitebg">
+      <div class="pcd_ad">
+        {dede:myad name='1'/}
+      </div>
+    </div>
+    <div class="content_box whitebg">
+      <h2 class="htitle"><span class="con_nav">您现在的位置是：{dede:field name='position'/}</h2>
+      <h1 class="con_tilte">{dede:field.title/}</h1>
+      <p class="bloginfo"><span>{dede:field.pubdate function="MyDate('Y-m-d H:i',@me)"/}</span><span>{dede:type} <a href="[field:typelink/]">[field:typename/]</a>{/dede:type} </span><span><script src="{dede:field name='phpurl'/}/count.php?view=yes&aid={dede:field name='id'/}&mid={dede:field name='mid'/}" type='text/javascript' language="javascript"></script>人已围观</span></p>
+      <p class="con_info"><b>简介</b>{dede:field.description/}...</p>
+      <div class="con_text"> {dede:field.body/}
+        <div class="pagelist"></div>
+        <p>Tags：
+          {dede:tag row='100' sort='rand'} <a href='[field:link/]'>[field:tag /]</a>&nbsp;
+          {/dede:tag} </p>
+        <p class="share"><b>转载：</b>感谢您对网站平台的认可，以及对我们原创作品以及文章的青睐，非常欢迎各位朋友分享到个人站长或者朋友圈，但转载请说明文章出处“来源演示站”。</p>
+        <div class="nextinfo">
+          <p>{dede:prenext get='pre'/}</p>
+          <p>{dede:prenext get='next'/}</p>
+        </div>
+      </div>
+    </div>
+    <div class="ad whitebg">
+      <div class="pcd_ad">
+        {dede:myad name='1'/}
+      </div>
+    </div>
+    <div class="whitebg">
+      <h2 class="htitle">相关文章</h2>
+      <ul class="otherlink">
+        {dede:arclist row='10' titlelen='50' orderby='pubdate'}
+        <li><a href="[field:arcurl/]" title="[field:title/]">[field:title/]</a></li>
+        {/dede:arclist}
+      </ul>
+    </div>
+    <div class="whitebg">
+      <h2 class="htitle">随机图文</h2>
+      <ul class="xiangsi">
+        {dede:arclist row='4' titlelen='50' orderby='click'}
+        <li><a href="[field:arcurl/]"><i><img src="[field:picname/]"></i>
+          <p>[field:title/]</p>
+          <span>[field:description function="cn_substr(@me,100)"/]...</span></a></li>
+        {/dede:arclist}
+      </ul>
+    </div>
+  </div>
+  <!--lbox end-->
+  <div class="rbox">
+    <div class="whitebg paihang">
+      <h2 class="htitle">点击排行</h2>
+      {dede:arclist limit='0,1' titlelen='50' orderby='click'}
+      <section class="topnews imgscale"><a href="[field:arcurl/]"><img src="[field:picname/]"><span>[field:title/]</span></a></section>
+      {/dede:arclist}
+      <ul>
+        {dede:arclist limit='1,8' titlelen='50' orderby='click'}
+        <li><i></i><a href="[field:arcurl/]" title="[field:title/]">[field:title/]</a></li>
+        {/dede:arclist}
+      </ul>
+    </div>
+    <div class="ad whitebg imgscale">
+      {dede:myad name='1'/}
+    </div>
+    <div class="whitebg tuijian">
+      <h2 class="htitle">本栏推荐</h2>
+      {dede:arclist limit='0,1' titlelen='50' flag='c'}
+      <section class="topnews imgscale"><a href="[field:arcurl/]"><img src="[field:picname/]"><span>[field:title/]</span></a></section>
+      {/dede:arclist}
+      <ul>
+        {dede:arclist limit='1,8' titlelen='50' flag='c'}
+        <li><a href="[field:arcurl/]" title="[field:title/]"><i><img src="[field:picname/]"></i>
+          <p>[field:title/]</p>
+          </a></li>
+        {/dede:arclist}
+      </ul>
+    </div>
+    <div class="ad whitebg imgscale">
+      {dede:myad name='1'/}
+    </div>
+    <div class="whitebg cloud">
+      <h2 class="htitle">标签云</h2>
+      <ul>
+        {dede:tag row='50' sort='rand'} <a href='[field:link/]'>[field:tag /]</a> {/dede:tag}
+      </ul>
+    </div>
+    <div class="whitebg wenzi">
+      <h2 class="htitle">猜你喜欢</h2>
+      <ul>
+        {dede:arclist row='10' titlelen='50' orderby='pubdate'}
+        <li><a href="[field:arcurl/]">[field:title/]</a></li>
+        {/dede:arclist}
+      </ul>
+    </div>
+    <div class="whitebg tongji">
+      <h2 class="htitle">站点信息</h2>
+      <ul>
+        <li><b>文章统计</b>：<a>{dede:sql sql="select count(*) as c from dede_archives where channel=1"}[field:c /]{/dede:sql}</a>篇文章</li>
+        <li><b>标签管理</b>：<a href="{dede:global.cfg_cmspath/}/tags.php">标签云</a></li>
+        <li><b>微信公众号</b>：扫描二维码，关注我们</li>
+        <li class="tongji_gzh"><img src='{dede:global.cfg_cmspath/}/skin/images/weixin.png'></li>
+      </ul>
+    </div>
+  </div>
+</article>
+{dede:include filename="footer.htm"/}
+</body>
+</html>

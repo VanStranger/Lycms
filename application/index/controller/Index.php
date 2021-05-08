@@ -11,22 +11,9 @@ class Index extends Controller{
         "pre"
     ];
     public function pre(){
-        // return "pre";
-        var_dump([]);
-        var_dump(config("path_type"));
+        $this->g=DB::table("config")->select();
     }
     public function index(){
-        // $user=DB::table("user")->insertEntity(input(),false);
-        $update=DB::table("user")->where("id",1)->updateEntity([
-            "username"=>"dsdsf",
-            "dsfds"=>"sdfds"
-        ]);
-        var_dump(DB::table("user")->where("id",1)->find());
-        $Love=new Model\Love();
-        $hername=$Love->gethername();
-        $data=DB::table("user")->select();
-        $this->assign("hername",$hername);
-        $this->assign("showhtml",'代码是:<p>Hello，{{ $hername}}。</p>');
         $this->displayHtml();
     }
     public function jsonapi(){

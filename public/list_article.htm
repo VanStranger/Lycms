@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{dede:field.title/}_{dede:global.cfg_webname/}</title>
+<meta name="keywords" content="{dede:field name='keywords'/}" />
+<meta name="description" content="{dede:field name='description' function='html2text(@me)'/}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{dede:global.cfg_cmspath/}/skin/css/base.css" rel="stylesheet">
+<link href="{dede:global.cfg_cmspath/}/skin/css/m.css" rel="stylesheet">
+<script src="{dede:global.cfg_cmspath/}/skin/js/jquery-1.8.3.min.js" ></script>
+<script src="{dede:global.cfg_cmspath/}/skin/js/comm.js"></script>
+<!--[if lt IE 9]>
+<script src="{dede:global.cfg_cmspath/}/skin/js/modernizr.js"></script>
+<![endif]-->
+</head>
+<body>
+<!--top begin--> 
+<!--top begin--> 
+{dede:include filename="head.htm"/} 
+<!--top end-->
+<article> 
+  <!--lbox begin-->
+  <div class="lbox">
+    <div class="whitebg lanmu"> <img src="{dede:global.cfg_cmspath/}/skin/images/lm.jpg">
+      <h1>{dede:field name='typename'/}</h1>
+      <p>这里是栏目简介</p>
+    </div>
+    <div class="whitebg bloglist">
+      <h2 class="htitle">最近更新</h2>
+      <ul>
+        {dede:list pagesize ='20'}
+        <li>
+          <h3 class="blogtitle"><a href="[field:arcurl/]">[field:title/]</a></h3>
+          <span class="blogpic imgscale"><i><a href="[field:picname/]">[field:typename/]</a></i><a href="[field:arcurl/]" title="[field:title/]"><img src="[field:picname/]" alt="[field:title/]"></a></span>
+          <p class="blogtext">[field:description function="cn_substr(@me,300)"/]... </p>
+          <p class="bloginfo"><span>[field:pubdate function="MyDate('Y-m-d',@me)"/]</span><span>【<a href="[field:typeurl/]">[field:typename/]</a>】</span></p>
+          <a href="[field:arcurl/]" class="viewmore">阅读更多</a> </li>
+        {/dede:list}
+      </ul>
+      <!--pagelist-->
+      <div class="pagelist">{dede:pagelist listitem="index,end,pre,next,pageno" listsize="1"/}</div>
+      <!--pagelist end--> 
+    </div>
+    <!--bloglist end--> 
+  </div>
+  <div class="rbox">
+    <div class="whitebg paihang">
+      <h2 class="htitle">点击排行</h2>
+      {dede:arclist limit='0,1' titlelen='50' orderby='click'}
+      <section class="topnews imgscale"><a href="[field:arcurl/]"><img src="[field:picname/]"><span>[field:title/]</span></a></section>
+      {/dede:arclist}
+      <ul>
+        {dede:arclist limit='1,8' titlelen='50' orderby='click'}
+        <li><i></i><a href="[field:arcurl/]" title="[field:title/]">[field:title/]</a></li>
+        {/dede:arclist}
+      </ul>
+    </div>
+    <div class="ad whitebg imgscale">
+      {dede:myad name='1'/}
+    </div>
+    <div class="whitebg tuijian">
+      <h2 class="htitle">本栏推荐</h2>
+      {dede:arclist limit='0,1' titlelen='50' flag='c'}
+      <section class="topnews imgscale"><a href="[field:arcurl/]"><img src="[field:picname/]"><span>[field:title/]</span></a></section>
+      {/dede:arclist}
+      <ul>
+        {dede:arclist limit='1,8' titlelen='50' flag='c'}
+        <li><a href="[field:arcurl/]" title="[field:title/]"><i><img src="[field:picname/]"></i>
+          <p>[field:title/]</p>
+          </a></li>
+        {/dede:arclist}
+      </ul>
+    </div>
+    <div class="ad whitebg imgscale">
+      {dede:myad name='1'/}
+    </div>
+    <div class="whitebg cloud">
+      <h2 class="htitle">标签云</h2>
+      <ul>
+        {dede:tag row='50' sort='rand'} <a href='[field:link/]'>[field:tag /]</a> {/dede:tag}
+      </ul>
+    </div>
+    <div class="whitebg wenzi">
+      <h2 class="htitle">猜你喜欢</h2>
+      <ul>
+        {dede:arclist row='10' titlelen='50' orderby='pubdate'}
+        <li><a href="[field:arcurl/]">[field:title/]</a></li>
+        {/dede:arclist}
+      </ul>
+    </div>
+    <div class="whitebg tongji">
+      <h2 class="htitle">站点信息</h2>
+      <ul>
+        <li><b>文章统计</b>：<a>{dede:sql sql="select count(*) as c from dede_archives where channel=1"}[field:c /]{/dede:sql}</a>篇文章</li>
+        <li><b>标签管理</b>：<a href="{dede:global.cfg_cmspath/}/tags.php">标签云</a></li>
+        <li><b>微信公众号</b>：扫描二维码，关注我们</li>
+        <li class="tongji_gzh"><img src='{dede:global.cfg_cmspath/}/skin/images/weixin.png'></li>
+      </ul>
+    </div>
+  </div>
+</article>
+{dede:include filename="footer.htm"/}
+</body>
+</html>

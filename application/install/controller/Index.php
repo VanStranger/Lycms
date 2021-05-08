@@ -55,13 +55,116 @@ class Index extends Controller{
                 // $file=fopen("./static/install/install_lock.txt","a+");
                 // fwrite($file,"安装锁，重新安装时删除此文件。");
                 // fclose($file);
+                
+                $tempname="step-4";
+                break;
+            
+            
+            default:
+                # code...
+                break;
+        }
+        $this->displayHtml($tempname);
+    }
+    public function testPassword($dbhost="localhost",$dbport=3306,$dblang="utf8",$dbuser,$dbpwd){
+        try {
+            $pdo = new \PDO(
+                'mysql:host=' . $dbhost . ';port=' . $dbport . ';charset=' . $dblang.';',
+                $dbuser,
+                $dbpwd,
+                array(
+                    //For PHP 5.3.6 or lower
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES ".$dblang,
+                    \PDO::ATTR_EMULATE_PREPARES => false,
+    
+                    //长连接
+                    //\PDO::ATTR_PERSISTENT => true,
+    
+                    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+                    \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+                )
+            );
+            return ['code'=>1];            
+        } catch (\Throwable $th) {
+            return ['code'=>0];            
+        }
+        
+    }
+    public function testDBname($dbname,$dbhost="127.0.0.1",$dbport=3306,$dblang="utf8",$dbuser,$dbpwd){
+        try {
+            $pdo = new \PDO(
+                'mysql:dbname=' . $dbname . ';host=' . $dbhost . ';port=' . $dbport . ';charset=' . $dblang.';',
+                $dbuser,
+                $dbpwd,
+                array(
+                    //For PHP 5.3.6 or lower
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES ".$dblang,
+                    \PDO::ATTR_EMULATE_PREPARES => false,
+    
+                    //长连接
+                    //\PDO::ATTR_PERSISTENT => true,
+    
+                    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+                    \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+                )
+            );
+            return ['code'=>1];
+        } catch (\Throwable $th) {
+            return ['code'=>0,"msg"=>$th->getMessage()] ;
+        }
+    }
+    public function createDatabase($dbname,$dbhost="127.0.0.1",$dbport=3306,$dblang="utf8",$dbuser,$dbpwd,$prefix){
+        try {
+            $pdo = new \PDO(
+                'mysql:host=' . $dbhost . ';port=' . $dbport . ';charset=' . $dblang.';',
+                $dbuser,
+                $dbpwd,
+                array(
+                    //For PHP 5.3.6 or lower
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES ".$dblang,
+                    \PDO::ATTR_EMULATE_PREPARES => false,
+    
+                    //长连接
+                    //\PDO::ATTR_PERSISTENT => true,
+    
+                    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+                    \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+                )
+            );
+            try {
+                $pdo = new \PDO(
+                    'mysql:dbname=' . $dbname . ';host=' . $dbhost . ';port=' . $dbport . ';charset=' . $dblang.';',
+                    $dbuser,
+                    $dbpwd,
+                    array(
+                        //For PHP 5.3.6 or lower
+                        \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES ".$dblang,
+                        \PDO::ATTR_EMULATE_PREPARES => false,
+        
+                        //长连接
+                        //\PDO::ATTR_PERSISTENT => true,
+        
+                        \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+                        \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+                    )
+                );
+            } catch (\Throwable $conn_db) {
+                try {
+                    $pdo->exec("CREATE DATABASE ".$dbname);
+                } catch (\Throwable $create_DB) {
+                    return ['code'=>0,"msg"=>"创建数据库失败"];
+                }
+            } 
+
+            //写入数据库文件
+            try {
                 $json=[
                     "type"=>"mysql",
                     "host"=>input("dbhost","127.0.0.1"),
                     "username"=>input("dbuser","root"),
                     "password"=>input("dbpwd","root"),
                     "database"=>input("dbname","test"),
-                    "hostport"=>3306,
+                    "hostport"=>input("dbport",3306),
                     "charset"=>input("dblang","utf8"),
                     "prefix"=>input("prefix",""),
                 ];
@@ -76,18 +179,30 @@ class Index extends Controller{
                 fwrite($file,"  ];\r\n");
                 fwrite($file,"?>\r\n");
                 fclose($file);
-
-                $tempname="step-4";
-                break;
-            
-            
-            default:
-                # code...
-                break;
+                $sqls=file_get_contents("./static/install/sql.sql");
+                if(input("prefix","")){
+                    $sqls=str_replace("if exists `","if exists `".input("prefix",""),$sqls);
+                    $sqls=str_replace("CREATE TABLE `","CREATE TABLE `".input("prefix",""),$sqls);
+                }
+                if(count($sqls)){
+                    $sqlsarr=explode(";",$sqls);
+                    try {
+                        foreach ($sqlsarr as $key => $sql) {
+                            $sql=preg_replace("/\r\n|\t|\s{2,}/","",$sql);
+                            if($sql){
+                                DB::query($sql);
+                            }
+                        }
+                    } catch (\Throwable $create_tables) {
+                        return ['code'=>0,"msg"=>"创建数据表失败","info"=>$create_tables->getMessage()];
+                    }
+                }
+            } catch (\Throwable $create_file) {
+                return ['code'=>0,"msg"=>"写入数据库配置文件失败"];
+            }           
+        } catch (\Throwable $conn) {
+            return ['code'=>0,"msg"=>"数据库连接失败"];            
         }
-        $this->displayHtml($tempname);
-    }
-    public function testpassword(){
-        var_dump($_SERVER);
+        
     }
 }
