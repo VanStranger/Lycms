@@ -1,17 +1,21 @@
+<?php
+  include "../ly/start.php";
+  $data=$ly->execute("/index/index/tags");
+?>
 <!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
-<title>{dede:field.title/}_{dede:global.cfg_webname/}</title>
+<title>标签列表_<?php echo $data['global']['webname'];?></title>
 <meta name="keywords" content="{dede:field name='keywords'/}" />
 <meta name="description" content="{dede:field name='description' function='html2text(@me)'/}" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="{dede:global.cfg_cmspath/}/skin/css/base.css" rel="stylesheet">
-<link href="{dede:global.cfg_cmspath/}/skin/css/m.css" rel="stylesheet">
-<script src="{dede:global.cfg_cmspath/}/skin/js/jquery-1.8.3.min.js" ></script>
-<script src="{dede:global.cfg_cmspath/}/skin/js/comm.js"></script>
+<link href="<?php echo $data['global']['cmspath'];?>skin/css/base.css" rel="stylesheet">
+<link href="<?php echo $data['global']['cmspath'];?>skin/css/m.css" rel="stylesheet">
+<script src="<?php echo $data['global']['cmspath'];?>skin/js/jquery-1.8.3.min.js" ></script>
+<script src="<?php echo $data['global']['cmspath'];?>skin/js/comm.js"></script>
 <!--[if lt IE 9]>
-<script src="{dede:global.cfg_cmspath/}/skin/js/modernizr.js"></script>
+<script src="<?php echo $data['global']['cmspath'];?>skin/js/modernizr.js"></script>
 <![endif]-->
 <style>
 .taglist a {
@@ -48,13 +52,20 @@
 </head>
 <body>
 <!--top begin--> 
-{dede:include filename="head.htm"/} 
+<?php include "./head.php";?>
 <!--top end-->
 <article>
   <div class="whitebg taglist">
     <h2 class="htitle">标签云</h2>
-    {dede:tag row='1000' sort='rand'} <a href='[field:link/]' style="font-size: 14px">[field:tag /]</a> {/dede:tag} </div>
+    <?php
+		foreach ($data['tags'] as $key => $value) {
+			?>
+		<a href='./tag.php?id=<?php echo $value['id'];?>' style="font-size: 14px"><?php echo $value['title'];?></a>
+			<?php
+		}
+		?>
+	</div>
 </article>
-{dede:include filename="footer.htm"/}
+<?php include "./footer.php";?>
 </body>
 </html>

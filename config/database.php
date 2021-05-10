@@ -5,7 +5,7 @@
       "host"=>"127.0.0.1",
       "username"=>"root",
       "password"=>"br13jHhrh7-1",
-      "database"=>"zhihu",
+      "database"=>"dx",
       "hostport"=>"3306",
       "charset"=>"utf8",
       "prefix"=>"",
