@@ -1,83 +1,156 @@
-Drop table if exists `config`;
-CREATE TABLE `config` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`key` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	`val` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	PRIMARY KEY (`id`) USING BTREE
-)
-COLLATE='utf8_general_ci'
-ENGINE=InnoDB;
+-- --------------------------------------------------------
+-- 主机:                           127.0.0.1
+-- 服务器版本:                        10.3.12-MariaDB - mariadb.org binary distribution
+-- 服务器操作系统:                      Win64
+-- HeidiSQL 版本:                  11.2.0.6213
+-- --------------------------------------------------------
 
-Drop table if exists `user`;
-CREATE TABLE `user` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`uid` CHAR(50) NOT NULL DEFAULT '0' COLLATE 'utf8_general_ci',
-	`password` CHAR(32) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	`username` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	`loginname` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	`sex` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '0:男，1：女',
-	`photo` CHAR(100) NULL DEFAULT './img/photos/0.png' COMMENT '图片地址' COLLATE 'utf8_general_ci',
-	`email` CHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	`emailactive` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-	`userinfo` CHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	`token` CHAR(32) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	`view` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	`guanzhu` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	PRIMARY KEY (`id`) USING BTREE
-)
-COLLATE='utf8_general_ci'
-ENGINE=InnoDB;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-Drop table if exists `nav`;
-CREATE TABLE `nav` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`pid` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '父级nav的id',
-	`type` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0:列表，1：封面',
-	`title` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	`subtitle` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	PRIMARY KEY (`id`) USING BTREE
-)
-COLLATE='utf8_general_ci'
-ENGINE=InnoDB;
+-- 导出  表 dx.article 结构
+DROP TABLE IF EXISTS `article`;
+CREATE TABLE IF NOT EXISTS `article` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `authorid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '作者',
+  `type` tinyint(3) unsigned NOT NULL DEFAULT 0 COMMENT '0普通1推荐',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT 0 COMMENT '0未审核，1通过，2驳回',
+  `nid` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'navid',
+  `title` varchar(50) NOT NULL DEFAULT '',
+  `preimg` varchar(200) NOT NULL DEFAULT '[]' COMMENT '缩略图',
+  `pre` char(200) NOT NULL DEFAULT '',
+  `content` text NOT NULL COMMENT '内容',
+  `jubao` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '举报',
+  `view` int(10) unsigned NOT NULL DEFAULT 0,
+  `comments` int(10) unsigned NOT NULL DEFAULT 0,
+  `create_time` int(11) unsigned NOT NULL DEFAULT 0,
+  `update_time` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
-Drop table if exists `tag`;
-CREATE TABLE `tag` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`pid` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '父级tag的id',
-	`title` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	`create_time` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '',
-	PRIMARY KEY (`id`) USING BTREE
-)
-COLLATE='utf8_general_ci'
-ENGINE=InnoDB;
+-- 数据导出被取消选择。
 
-Drop table if exists `article`;
-CREATE TABLE `article` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`authorid` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '作者',
-	`nid` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'navid',
-	`zid` SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '章节id',
-	`title` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	`preimg` CHAR(50) NOT NULL DEFAULT '[]' COMMENT '缩略图' COLLATE 'utf8_general_ci',
-	`pre` CHAR(200) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-	`content` TEXT NOT NULL COMMENT '内容' COLLATE 'utf8_general_ci',
-	`jubao` SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '举报',
-	`comments` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	`create_time` INT(11) UNSIGNED NOT NULL DEFAULT '0',
-	`update_time` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '更新时间',
-	PRIMARY KEY (`id`) USING BTREE
-)
-COLLATE='utf8_general_ci'
-ENGINE=InnoDB
-ROW_FORMAT=DYNAMIC;
+-- 导出  表 dx.art_tag 结构
+DROP TABLE IF EXISTS `art_tag`;
+CREATE TABLE IF NOT EXISTS `art_tag` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `artid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '作者',
+  `tagid` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'navid',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
-Drop table if exists `art_tag`;
-CREATE TABLE `art_tag` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`artid` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '作者',
-	`tagid` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'navid',
-	PRIMARY KEY (`id`) USING BTREE
-)
-COLLATE='utf8_general_ci'
-ENGINE=InnoDB
-ROW_FORMAT=DYNAMIC;
+-- 数据导出被取消选择。
+
+-- 导出  表 dx.banner 结构
+DROP TABLE IF EXISTS `banner`;
+CREATE TABLE IF NOT EXISTS `banner` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `img` varchar(50) COLLATE utf8_general_mysql500_ci NOT NULL DEFAULT '',
+  `title` varchar(50) COLLATE utf8_general_mysql500_ci NOT NULL DEFAULT '',
+  `href` varchar(150) COLLATE utf8_general_mysql500_ci NOT NULL DEFAULT '',
+  `pre` varchar(150) COLLATE utf8_general_mysql500_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_mysql500_ci;
+
+-- 数据导出被取消选择。
+
+-- 导出  表 dx.config 结构
+DROP TABLE IF EXISTS `config`;
+CREATE TABLE IF NOT EXISTS `config` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(50) NOT NULL DEFAULT '',
+  `val` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- 数据导出被取消选择。
+
+-- 导出  表 dx.links 结构
+DROP TABLE IF EXISTS `links`;
+CREATE TABLE IF NOT EXISTS `links` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `href` varchar(150) COLLATE utf8_general_mysql500_ci NOT NULL DEFAULT '',
+  `title` varchar(50) COLLATE utf8_general_mysql500_ci NOT NULL DEFAULT '',
+  `img` varchar(150) COLLATE utf8_general_mysql500_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_mysql500_ci;
+
+-- 数据导出被取消选择。
+
+-- 导出  表 dx.nav 结构
+DROP TABLE IF EXISTS `nav`;
+CREATE TABLE IF NOT EXISTS `nav` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '父级nav的id',
+  `type` tinyint(3) unsigned NOT NULL DEFAULT 0 COMMENT '0:列表，1：封面',
+  `title` varchar(50) NOT NULL DEFAULT '',
+  `subtitle` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- 数据导出被取消选择。
+
+-- 导出  表 dx.nav_art 结构
+DROP TABLE IF EXISTS `nav_art`;
+CREATE TABLE IF NOT EXISTS `nav_art` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `navid` int(10) unsigned NOT NULL DEFAULT 0,
+  `content` mediumtext COLLATE utf8_general_mysql500_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_mysql500_ci;
+
+-- 数据导出被取消选择。
+
+-- 导出  表 dx.role 结构
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE IF NOT EXISTS `role` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) COLLATE utf8_general_mysql500_ci NOT NULL DEFAULT '',
+  `des` varchar(50) COLLATE utf8_general_mysql500_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_mysql500_ci;
+
+-- 数据导出被取消选择。
+
+-- 导出  表 dx.tag 结构
+DROP TABLE IF EXISTS `tag`;
+CREATE TABLE IF NOT EXISTS `tag` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '父级tag的id',
+  `title` varchar(50) NOT NULL DEFAULT '',
+  `create_time` int(10) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- 数据导出被取消选择。
+
+-- 导出  表 dx.user 结构
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `rid` tinyint(4) NOT NULL DEFAULT 0,
+  `password` char(32) NOT NULL DEFAULT '',
+  `username` varchar(50) NOT NULL DEFAULT '',
+  `loginname` varchar(50) NOT NULL DEFAULT '',
+  `sex` tinyint(3) unsigned NOT NULL DEFAULT 0 COMMENT '0:男，1：女',
+  `photo` char(100) DEFAULT './img/photos/0.png' COMMENT '图片地址',
+  `email` char(50) NOT NULL DEFAULT '',
+  `userinfo` char(50) NOT NULL DEFAULT '',
+  `token` char(32) NOT NULL DEFAULT '',
+  `view` int(10) unsigned NOT NULL DEFAULT 0,
+  `guanzhu` int(10) unsigned NOT NULL DEFAULT 0,
+  `lastlogin` int(10) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- 数据导出被取消选择。
+
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

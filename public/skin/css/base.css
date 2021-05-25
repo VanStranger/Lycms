@@ -754,7 +754,7 @@ nav {
 .bloglist ul {
 	padding: 10px 0 0
 }
-.bloglist li {
+.bloglist ul>li {
 	overflow: hidden;
 	margin-bottom: 20px;
 	border-bottom: #eee 1px dashed;
@@ -1409,6 +1409,9 @@ list2.html
 	clear: both;
 	margin: 0 0 10px;
 }
+.pagelist li{
+	display:inline-block;
+}
 .pagelist a {
 	color: #666;
 	margin: 0 5px 10px;
@@ -1424,7 +1427,7 @@ list2.html
 .pagelist > b {
 	padding: 5px 10px;
 }
-a.curPage {
+.pagelist .pageli.active .pagea{
 	color: #19585d;
 	font-weight: bold;
 }

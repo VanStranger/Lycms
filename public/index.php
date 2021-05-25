@@ -28,9 +28,15 @@
     <!--banbox begin-->
     <div class="banbox">
       <div class="banner">
-        <div id="banner" class="fader"> {dede:arclist row='5' titlelen='50' flag='f'}
-          <li class="slide" ><a href="[field:arcurl/]"><img src="[field:picname/]"></a></li>
-          {/dede:arclist}
+        <div id="banner" class="fader"> 
+          <?php
+          foreach ($data['banners'] as $key => $value) {
+            ?>
+          <li class="slide" ><a href="<?php echo $value['href'];?>"><img src="<?php echo $value['img'];?>"></a></li>
+            <?php
+          }
+          ?>
+          
           <div class="fader_controls">
             <div class="page prev" data-target="prev"></div>
             <div class="page next" data-target="next"></div>
@@ -46,7 +52,7 @@
       <ul>
         <?php 
         foreach ($data['tarts'] as $key => $value) {
-          $preimgs=json_decode($value['preimg'],true);
+          $preimgs=json_decode($value['preimgs'],true);
           ?>
         <li>
           <a href="./art.php?id=<?php echo $value['id'];?>&nid=<?php echo $value['nid'];?>">
@@ -88,7 +94,7 @@
                <ul>
                  <?php
                  foreach ($v['arts_withimg'] as $k => $v) {
-                   $preimgs=json_decode($value['preimg'],true);
+                   $preimgs=json_decode($value['preimgs'],true);
                     ?>
                     <li><a href="./art.php?id=<?php echo $v['id'];?>"><img src="<?php echo count($preimgs)?$preimgs[0]:$data['global']['img0'];?>"><span><?php echo $v['title'];?></span></a></li>
                     <?php
@@ -136,7 +142,7 @@
       <ul>
         <?php
         foreach ($data['arts'] as $key => $value) {
-          $preimgs=json_decode($value['preimg'],true);
+          $preimgs=json_decode($value['preimgs'],true);
           ?>
           <li>
             <h3 class="blogtitle"><a href="./art.php?id=<?php echo $value['id'];?>&nid=<?php echo $value['nid'];?>"><?php echo $value['title'];?></a></h3>
@@ -153,17 +159,19 @@
   </div>
   <div class="rbox">
     <div class="card">
-      <h2>我的名片</h2>
-      <p>网名：<?php echo $data['global']['cfg_wm'];?></p>
-      <p>职业：<?php echo $data['global']['cfg_zy'];?></p>
-      <p>现居：<?php echo $data['global']['cfg_xj'];?></p>
-      <p>Email：<?php echo $data['global']['cfg_email'];?></p>
-      <ul class="linkmore">
+      <h2>如果有关部门认为此网站需要关闭，可通过以下任意方式告知。</h2>
+      <p>邮箱：<?php echo $data['global']['email'];?></p>
+      <p>QQ：<?php echo $data['global']['qq'];?></p>
+      <p>微信：<?php echo $data['global']['wechat'];?></p>
+      <p>微信公众号：<?php echo $data['global']['wepub'];?></p>
+      <!-- <p>现居：<?php echo $data['global']['cfg_xj'];?></p>
+      <p>Email：<?php echo $data['global']['cfg_email'];?></p> -->
+      <!-- <ul class="linkmore">
         <li><a href="<?php echo $data['global']['cmspath'];?>" class="iconfont icon-zhuye"></a></li>
         <li><a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=<?php echo $data['global']['cfg_email'];?>" target="_blank" class="iconfont icon-youxiang"></a></li>
         <li><a href="http://wpa.qq.com/msgrd?v=3&uin=<?php echo $data['global']['cfg_qq'];?>&site=qq&menu=yes" target="_blank" class="iconfont icon---"></a></li>
         <li id="weixin"><a href="#" class="iconfont icon-weixin"></a><i><img src="<?php echo $data['global']['cmspath'];?>skin/images/weixin.png"></i></li>
-      </ul>
+      </ul> -->
     </div>
     <div class="whitebg paihang">
       <h2 class="htitle">点击排行</h2>
@@ -204,8 +212,8 @@
       <ul>
         <li><b>文章统计</b>：<a><?php echo $data['art_count'];?></a>篇文章</li>
         <li><b>标签管理</b>：<a href="<?php echo $data['global']['cmspath'];?>tags.php">标签云</a></li>
-        <li><b>微信公众号</b>：扫描二维码，关注我们</li>
-        <li class="tongji_gzh"><img src='<?php echo $data['global']['cmspath'];?>skin/images/weixin.png'></li>
+        <!-- <li><b>微信公众号</b>：扫描二维码，关注我们</li>
+        <li class="tongji_gzh"><img src='<?php echo $data['global']['cmspath'];?>skin/images/weixin.png'></li> -->
       </ul>
     </div>
     <div class="links whitebg">

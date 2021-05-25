@@ -1,4 +1,7 @@
 <?php
+function res(){
+    
+}
 function curlhtml($url){
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_POST, 0);
@@ -272,5 +275,82 @@ function uploadFiles($filename="upload_file",$path="/uploads"){
         }
     }
     return array("state"=>1,"files"=>$files,"f"=>$_FILES,"path"=>$path,"filename"=>$filename);
+}
+function gethref($url="",$params=[]){
+    // gethref(array("./notes.php",array("page"=>now+1)));
+    $url=$_SERVER['QUERY_STRING'];
+    parse_str($url,$ar);
+    foreach ($params as $key => $value) {
+        $ar[$key]=$value;
+    }
+    return ($obj[0]?:$_SERVER['PHP_SELF'])."?".http_build_query($ar);
+}
+function getpage($now=1,$max,$href="",$arr=array()){
+    $max=intval($max)<1?1:intval($max);
+    $now=$now>$max?$max:$now;
+    switch ($now) {
+        case 1:
+            $pre="";
+            if($max==1){
+                $next="<li class='pageli'>共1页</li>";
+            }else{
+                $next="<li class='pageli sib'><a class='pagea' href='".gethref($href, array_merge($arr,array("page"=>$now+1)))."'>下一页</a></li>";
+            }
+            break;
+        case $max:
+            $next="";
+            $pre="<li class='pageli sib'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$now-1)))."'>上一页</a></li>";
+            break;
+        default:
+            $pre="<li class='pageli sib'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$now-1)))."'>上一页</a></li>";
+            $next="<li class='pageli sib'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$now+1)))."'>下一页</a></li>";
+            break;
+    }
+    switch (true) {
+        case $now<5:
+            if($max>7){
+                $body="";
+                for($i=1;$i<6;$i++){
+                    if($i==$now){
+                        $body.="<li class='pageli active'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$i)))."'>".$i."</a></li>";
+                    }else{
+                        $body.="<li class='pageli'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$i)))."'>".$i."</a></li>";
+                    }
+                }
+                $body.="<li class='pageli'>···</li><li class='pageli'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$max)))."'>".$max."</a></li>";
+            }else{
+                $body="";
+                for($i=1;$i<=$max;$i++){
+                    if($i==$now){
+                        $body.="<li class='pageli active'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$i)))."'>".$i."</a></li>";
+                    }else{
+                        $body.="<li class='pageli'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$i)))."'>".$i."</a></li>";
+                    }
+                }
+            }
+            break;
+        case ($now>$max-3 && $now>4):
+            $body="<li class='pageli'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>1)))."'> 1</a></li><li class='pageli'>···</li>";
+            for($i=$now-3;$i<=$max;$i++){
+                if($i==$now){
+                    $body.="<li class='pageli active'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$i)))."'>".$i."</a></li>";
+                }else{
+                    $body.="<li class='pageli'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$i)))."'>".$i."</a></li>";
+                }
+            }
+            break;
+        default:
+            $body="<li class='pageli'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>1)))."'>1</a></li><li class='pageli'>···</li>";
+            for($i=$now-3;$i<=$now+3;$i++){
+                if($i==$now){
+                    $body.="<li class='pageli active'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$i)))."'>".$i."</a></li>";
+                }else{
+                    $body.="<li class='pageli'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$i)))."'>".$i."</a></li>";
+                }
+            }
+            $body.="<li class='pageli'>···</li><li class='pageli'><a class='pagea' href='".gethref($href,array_merge($arr,array("page"=>$max)))."'>".$max."</a></li>";
+            break;
+    }
+    return $pre.$body.$next;
 }
 

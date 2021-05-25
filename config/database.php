@@ -2,7 +2,7 @@
   return [
     "db"=>[
       "type"=>"mysql",
-      "host"=>"127.0.0.1",
+      "host"=>"localhost",
       "username"=>"root",
       "password"=>"br13jHhrh7-1",
       "database"=>"dx",

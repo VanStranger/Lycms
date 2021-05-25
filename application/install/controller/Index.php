@@ -57,6 +57,11 @@ class Index extends Controller{
                 // fclose($file);
                 
                 $tempname="step-4";
+                $res=$this->createDatabase();
+                $res['input']=input();
+                if($res['code']===0){
+                    return $res;
+                }
                 break;
             
             
@@ -113,7 +118,14 @@ class Index extends Controller{
             return ['code'=>0,"msg"=>$th->getMessage()] ;
         }
     }
-    public function createDatabase($dbname,$dbhost="127.0.0.1",$dbport=3306,$dblang="utf8",$dbuser,$dbpwd,$prefix){
+    public function createDatabase(){
+        $dbname=input("dbname");
+        $dbhost=input("dbhost","127.0.0.1");
+        $dbport=input("dbport",3306);
+        $dblang=input("dblang","utf8");
+        $dbuser=input("dbuser");
+        $dbpwd=input("dbpwd");
+        $dbprefix=input("dbprefix","");
         try {
             $pdo = new \PDO(
                 'mysql:host=' . $dbhost . ';port=' . $dbport . ';charset=' . $dblang.';',
@@ -140,7 +152,6 @@ class Index extends Controller{
                         //For PHP 5.3.6 or lower
                         \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES ".$dblang,
                         \PDO::ATTR_EMULATE_PREPARES => false,
-        
                         //长连接
                         //\PDO::ATTR_PERSISTENT => true,
         
@@ -150,9 +161,9 @@ class Index extends Controller{
                 );
             } catch (\Throwable $conn_db) {
                 try {
-                    $pdo->exec("CREATE DATABASE ".$dbname);
+                    $pdo->exec("CREATE DATABASE IF NOT EXISTS ".$dbname." DEFAULT CHARSET ".$dblang." COLLATE ".($dblang==="utf8"?"utf8_general_mysql500_ci":"gbk_chinese_ci"));
                 } catch (\Throwable $create_DB) {
-                    return ['code'=>0,"msg"=>"创建数据库失败"];
+                    return ['code'=>0,"msg"=>"创建数据库失败","info"=>$conn_db->getMessage(),"info1"=>$create_DB->getMessage()];
                 }
             } 
 
@@ -166,7 +177,7 @@ class Index extends Controller{
                     "database"=>input("dbname","test"),
                     "hostport"=>input("dbport",3306),
                     "charset"=>input("dblang","utf8"),
-                    "prefix"=>input("prefix",""),
+                    "prefix"=>input("dbprefix",""),
                 ];
                 $file=fopen("../config/database.php","w+");
                 fwrite($file,"<?php\r\n");
@@ -180,9 +191,11 @@ class Index extends Controller{
                 fwrite($file,"?>\r\n");
                 fclose($file);
                 $sqls=file_get_contents("./static/install/sql.sql");
-                if(input("prefix","")){
-                    $sqls=str_replace("if exists `","if exists `".input("prefix",""),$sqls);
-                    $sqls=str_replace("CREATE TABLE `","CREATE TABLE `".input("prefix",""),$sqls);
+                $sqls=preg_replace("/--\s.+?\r\n/","",$sqls);
+                $sqls=preg_replace("/\/*!\s.+\*\/;\r\n/","",$sqls);
+                if(input("dbprefix","")){
+                    $sqls=str_replace("DROP TABLE IF EXISTS `","DROP TABLE IF EXISTS `".input("dbprefix",""),$sqls);
+                    $sqls=str_replace("CREATE TABLE IF NOT EXISTS `","CREATE TABLE IF NOT EXISTS `".input("dbprefix",""),$sqls);
                 }
                 if(count($sqls)){
                     $sqlsarr=explode(";",$sqls);
@@ -194,14 +207,14 @@ class Index extends Controller{
                             }
                         }
                     } catch (\Throwable $create_tables) {
-                        return ['code'=>0,"msg"=>"创建数据表失败","info"=>$create_tables->getMessage()];
+                        return ['code'=>0,"msg"=>"创建数据表失败","info"=>$create_tables->getMessage(),"sqls"=>$sqls];
                     }
                 }
             } catch (\Throwable $create_file) {
                 return ['code'=>0,"msg"=>"写入数据库配置文件失败"];
             }           
         } catch (\Throwable $conn) {
-            return ['code'=>0,"msg"=>"数据库连接失败"];            
+            return ['code'=>0,"msg"=>"数据库连接失败","info"=>$conn->getMessage()];            
         }
         
     }

@@ -33,6 +33,8 @@ class Index extends Controller{
         return $ids;
     }
     public function index(){
+        $banners=DB::table("banner")->select();
+        $this->data['banners']=$banners;
         $tarts=DB::table("article")->where("type",1)->limit(2)->select();
         $this->data['tarts']=$tarts;
         $nav_arts=[];
@@ -40,7 +42,7 @@ class Index extends Controller{
             if($value['type']===0 && $value['pid']===0){
                 $arts_img_nav=DB::table("article")
                 ->where("nid",$value['id'])
-                ->where("preimg <> '[]'")
+                ->where("preimg <> ''")
                 ->limit(2)
                 ->select();
                 $arts_img_nav_idstr="";
@@ -87,7 +89,7 @@ class Index extends Controller{
         $nav=DB::table("nav")->where("id",$id)->find();
         if($nav && $nav['type']===1){
             $content=DB::table("nav_art")->where("navid",$id)->find();
-            $nav['content']=$content['content'];
+            $nav['content']=htmlspecialchars_decode($content['content']);
         }else{
             $ids=$this->getNavs($id).$id;
             $newarts=DB::table("article")
@@ -98,6 +100,9 @@ class Index extends Controller{
             ->order("article.update_time desc")
             ->select();
             $this->data['newarts']=$newarts;
+            $artsnum=DB::table("article")->where("nid in (".$ids.")")->count();
+            $maxpage=ceil($artsnum/$size)?:1;
+            $this->data['maxpage']=$maxpage;
             $artsnum=DB::table("article")
             ->where("nid in (".$ids.")")
             ->order("update_time desc")
@@ -114,18 +119,21 @@ class Index extends Controller{
         return $this->data;
     }
     public function art(){
-        $id=intval(input("id")) || 0;
+        $id=intval(input("id")) ?: 0;
         $nid=input("nid");
-        $nav=DB::table("nav")->where("id",$id)->find();
+        $nav=DB::table("nav")->where("id",$nid)->find();
         $this->data['nav']=$nav;
         $art=DB::table("article")
         ->where("id",$id)
         ->find();
+        if($art){
+            $art['content']=htmlspecialchars_decode($art['content']);
+        }
         $update=DB::table("article")->where("id",$id)->update([
             "view"=>['view+1']
-        ]);
+            ]);
         $tags=DB::table("art_tag")
-        ->join("tag","tag.id=art_tag.tagid","left")
+        ->join("tag","tag.id=art_tag.tagid","inner")
         ->where("art_tag.artid",$id)
         ->field("tag.*")
         ->select();
@@ -164,6 +172,9 @@ class Index extends Controller{
         ->limit(($page-1)*$size,$size)
         ->select();
         $this->data['arts']=$arts;
+        $artsnum=DB::table("article")->where("nid",$id)->count();
+        $maxpage=ceil($artsnum/$size)?:1;
+        $this->data['maxpage']=$maxpage;
         $arts_nav=DB::table("article")
         ->join("art_tag","article.id=art_tag.artid","inner")
         ->field("article.*")
@@ -195,10 +206,19 @@ class Index extends Controller{
             ->where("article.title like ? or article.content like ? or tag.title like ? or nav.title like ?",['%'.$q."%",'%'.$q."%",'%'.$q."%",'%'.$q."%"])
             ->limit(($page-1)*$size,$size)
             ->select();
+            $this->data['newarts']=$newarts;
+            $artsnum=DB::table("article")->join("art_tag","article.id=art_tag.artid","left")
+            ->join("tag","tag.id=art_tag.tagid","left")
+            ->join("nav","nav.id=article.nid","left")
+            ->field("article.*,tag.title as tag,nav.title as nav")
+            ->where("article.title like ? or article.content like ? or tag.title like ? or nav.title like ?",['%'.$q."%",'%'.$q."%",'%'.$q."%",'%'.$q."%"])->count();
+            $maxpage=ceil($artsnum/$size)?:1;
         }else{
             $arts=[];
+            $maxpage=1;
         }
         $this->data['arts']=$arts;
+        $this->data['maxpage']=$maxpage;
         
         $arts_view=DB::table("article")
         ->join("art_tag","article.id=art_tag.artid","inner")
@@ -210,9 +230,19 @@ class Index extends Controller{
         return $this->data;
     }
     public function ceshi(){
-        $a=DB::table("nav")
-        ->where("id in (?)",['1,2,3'])
-        ->select();
-        return $a;
+        // $a=DB::table(["nav"=>"n"])
+        // ->where("nav.id in (?)",['1,2,3'])
+        // ->select();
+        // $a=DB::table(["nav"=>"n"])
+        // ->where("n.id",3)
+        // ->select();
+        // echo DB::getSql();
+        // return $a;
+        $array1 = array("color" => "red", 2, 4);
+        $array2 = array("a", "b", "color" => "green", "shape" => "trapezoid", 4);
+        $result = array_merge($array1, $array2);
+        var_dump($result);
+        var_dump($array1);
+        var_dump($array2);
     }
 }

@@ -168,8 +168,8 @@
       <ul>
         <li><b>文章统计</b>：<a><?php echo $data['art_count'];?></a>篇文章</li>
         <li><b>标签管理</b>：<a href="<?php echo $data['global']['cmspath'];?>tags.php">标签云</a></li>
-        <li><b>微信公众号</b>：扫描二维码，关注我们</li>
-        <li class="tongji_gzh"><img src='<?php echo $data['global']['cmspath'];?>skin/images/weixin.png'></li>
+        <!-- <li><b>微信公众号</b>：扫描二维码，关注我们</li>
+        <li class="tongji_gzh"><img src='<?php echo $data['global']['cmspath'];?>skin/images/weixin.png'></li> -->
       </ul>
     </div>
   </div>

@@ -31,7 +31,7 @@
       <ul>
         <?php 
         foreach ($data['arts'] as $key => $value) {
-          $preimgs=json_decode($value['preimg'],true);
+          $preimgs=json_decode($value['preimgs'],true);
           ?>
         
           <li>
@@ -45,7 +45,7 @@
         ?>
       </ul>
       <!--pagelist-->
-      <div class="pagelist">{dede:pagelist listitem="index,end,pre,next,pageno" listsize="1"/}</div>
+      <div class="pagelist"><?php echo getpage(input("page",1),$data['maxpage'],"./tag.php");?></div>
       <!--pagelist end--> 
     </div>
     <!--bloglist end--> 
@@ -114,8 +114,8 @@
       <ul>
         <li><b>文章统计</b>：<a><?php echo $data['art_count'];?></a>篇文章</li>
         <li><b>标签管理</b>：<a href="<?php echo $data['global']['cmspath'];?>tags.php">标签云</a></li>
-        <li><b>微信公众号</b>：扫描二维码，关注我们</li>
-        <li class="tongji_gzh"><img src='<?php echo $data['global']['cmspath'];?>skin/images/weixin.png'></li>
+        <!-- <li><b>微信公众号</b>：扫描二维码，关注我们</li>
+        <li class="tongji_gzh"><img src='<?php echo $data['global']['cmspath'];?>skin/images/weixin.png'></li> -->
       </ul>
     </div>
   </div>
