@@ -2,13 +2,14 @@
 namespace application\index\controller\config;
 
 use \ly\lib\DB as DB;
+use \ly\lib\Result as Result;
 trait config
 {
 
     public function getConfigs()
     {
         $configs = DB::table("config")->select();
-        return ['state' => 1, "data" => $configs, 'msg' => ''];
+        return Result::success($configs);
 
     }
     public function updateConfig($config)
@@ -21,19 +22,19 @@ trait config
             $edit=DB::table("config")
             ->insertEntity($config);
         }
-        return ['state'=>$edit];
+        return Result::code($edit?0:1);
     }
     public function removeConfigs($ids=[]){
         if($ids){
             $idstr="(".implode(",",$ids).")";
             $edit=DB::table("config")->where("id in ".$idstr)->delete();
             if($edit>0){
-              return ['state'=>1];
+              return Result::success();
             }else{
-              return ['state'=>0,"msg"=>"删除的数量为0"];
+              return Result::fail("删除的数量为0");
             }
         }else{
-            return ['state'=>0,"msg"=>"待删除项目为空"];
+            return Result::fail("待删除项目为空");
         }
     }
 }

@@ -238,11 +238,51 @@ class Index extends Controller{
         // ->select();
         // echo DB::getSql();
         // return $a;
-        $array1 = array("color" => "red", 2, 4);
-        $array2 = array("a", "b", "color" => "green", "shape" => "trapezoid", 4);
-        $result = array_merge($array1, $array2);
-        var_dump($result);
-        var_dump($array1);
-        var_dump($array2);
+        set_time_limit(0);
+        $db=include LY_BASEPATH . "/config/database.php";
+        $path=LY_BASEPATH . "databack";
+        $contpath=$path.DIRECTORY_SEPARATOR."tables";
+        if(!is_dir($path)){
+            mkdir($path,0755);
+        }
+        if(!is_dir($contpath)){
+            mkdir($contpath,0755);
+        }
+        $filename=date("Y_m_d_H_i_s") . ".sql";
+        $file=fopen($path.DIRECTORY_SEPARATOR.$filename,"w+");
+        $cont="";
+        $tables=DB::query("show tables");
+        $cont.="CREATE DATABASE IF NOT EXISTS `".$db['db']['database']."`;\r\nUSE `".$db['db']['database']."`;\r\n";
+        foreach ($tables as $key => $value) {
+            $table=$value['Tables_in_dx'];
+            $cont.="DROP TABLE IF EXISTS `$table`";
+            $createTable=DB::query("show create table $table");
+            $cont.=$createTable[0]['Create Table'].";\r\n";
+            $data=DB::table($table)->select();
+        }
+        echo $cont;
+        fwrite($file,$cont);
+        fclose($file);
+        foreach ($tables as $key => $value) {
+            $table=$value['Tables_in_dx'];
+            $data=DB::table($table)->select();
+            if($data){
+                $tablefile=fopen($path.DIRECTORY_SEPARATOR.$table.'.sql','w+');
+                $tablecont="INSERT INTO `".$table."` VALUES \r\n";
+                foreach ($data as $key => $value) {
+                    $tablecont.="(";
+                    foreach ($value as $k => $v) {
+                        $tablecont.=(is_numeric($v)?$v:'"'.$v.'"') .",";
+                    }
+                    $tablecont=substr($tablecont,0,-1)."),";
+                }
+                $tablecont=substr($tablecont,0,-1).";\r\n";
+                echo $tablecont;
+                fwrite($tablefile,$tablecont);
+                fclose($tablefile);
+            }
+        }
+        
+
     }
 }

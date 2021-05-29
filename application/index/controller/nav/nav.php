@@ -2,13 +2,14 @@
 namespace application\index\controller\nav;
 
 use \ly\lib\DB as DB;
+use \ly\lib\Result as Result;
 trait nav
 {
 
     public function getNavs()
     {
         $navs = DB::table("nav")->order("weight desc")->select();
-        return ['state' => 1, "data" => $navs, 'msg' => ''];
+        return Result::success($navs);
 
     }
     public function updateNav($nav)
@@ -21,19 +22,19 @@ trait nav
             $edit=DB::table("nav")
             ->insertEntity($nav);
         }
-        return ['state'=>$edit];
+        return Result::code($edit?0:1);
     }
     public function removeNavs($ids=[]){
         if($ids){
             $idstr="(".implode(",",$ids).")";
             $edit=DB::table("nav")->where("id in ".$idstr)->delete();
             if($edit>0){
-              return ['state'=>1];
+              return Result::success();
             }else{
-              return ['state'=>0,"msg"=>"删除的数量为0"];
+              return Result::fail("删除的数量为0");
             }
         }else{
-            return ['state'=>0,"msg"=>"待删除项目为空"];
+            return Result::fail("待删除项目为空");
         }
     }
     public function getNavCont($navid)
@@ -42,7 +43,7 @@ trait nav
         if($navs){
             $navs['content']=htmlspecialchars_decode($navs['content']);
         }
-        return ['state' => 1, "data" => $navs, 'msg' => ''];
+        return Result::success($navs);
 
     }
     public function editNavCont($navid,$content=""){
@@ -60,12 +61,12 @@ trait nav
 
             }
             if($edit===1){
-                return ['state'=>1];
+                return Result::success();
             }else{
-                return ['state'=>0,"msg"=>"系统错误，请稍后再试"];
+                return Result::fail("系统错误，请稍后再试");
             }
         }else{
-            return ['state'=>0,"msg"=>"参数缺失"];
+            return Result::fail("参数缺失");
         }
     }
 }

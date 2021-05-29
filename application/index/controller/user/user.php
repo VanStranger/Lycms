@@ -2,19 +2,20 @@
 namespace application\index\controller\user;
 
 use \ly\lib\DB as DB;
+use \ly\lib\Result as Result;
 trait user
 {
     public function currentUser(){
-        return ["state"=>1,"data"=>$this->user];
+        return Result::success($this->user);
     }
-    public function login($loginname, $password)
+    public function login($loginname="", $password="")
     {
         $user = DB::table("user")
             ->join("role", "user.rid=role.id", "left")
             ->field("user.id,username,loginname,token,role.title as role")
             ->where(['loginname' => $loginname, "password" => md5($password)])->find();
         if (!$user) {
-            return ['state' => 0, "msg" => "用户名或密码不正确"];
+            return Result::fail("用户名或密码不正确");
         } else {
             $user = array_change_key_case($user, CASE_LOWER);
             $userid = $user['id'];
@@ -30,9 +31,9 @@ trait user
                 setcookie("Username", $username, time() + 3600 * 24, "/");
                 setcookie("Loginname", $loginname, time() + 3600 * 24, "/");
                 setcookie("role", $user['rid'], time() + 3600 * 24, "/");
-                return ['state' => 1, "data" => $user];
+                return Result::success($user);
             } else {
-                return ['state' => 0, "msg" => "操作失败"];
+                return Result::fail("操作失败");
             }
         }
     }
@@ -45,7 +46,7 @@ trait user
     public function getUsers()
     {
         $navs = DB::table("user")->select();
-        return ['state' => 1, "data" => $navs, 'msg' => ''];
+        return Result::success($navs);
 
     }
     public function updateUser($user)
@@ -58,7 +59,11 @@ trait user
             $edit = DB::table("user")
                 ->insertEntity($user);
         }
-        return ['state' => $edit];
+        if($edit){
+            return Result::success();
+        }else{
+            return Result::fail();
+        }
     }
     public function delUser($ids = [])
     {
@@ -66,12 +71,12 @@ trait user
             $idstr = "(" . implode(",", $ids) . ")";
             $edit = DB::table("user")->where("id in " . $idstr)->delete();
             if ($edit > 0) {
-                return ['state' => 1];
+                return Result::success();
             } else {
-                return ['state' => 0, "msg" => "删除的数量为0"];
+                return Result::fail("删除的数量为0");
             }
         } else {
-            return ['state' => 0, "msg" => "待删除项目为空"];
+            return Result::fail("待删除项目为空");
         }
     }
 }

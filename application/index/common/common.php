@@ -1,6 +1,7 @@
 <?php
+use \ly\lib\Result as Result;
 function res(){
-    
+
 }
 function curlhtml($url){
     $ch = curl_init();
@@ -35,7 +36,7 @@ function xmlToArray($xml){
 
 function uploadImgs($filename="imgs",$path="/images/uploads"){
     if (!$_FILES[$filename]) {
-        return array("state"=>0,"error"=>'无图片上传信息，或文件key设置错误');
+        return Result::fail('无图片上传信息，或文件key设置错误',1,null,$_FILES);
         die ();
     }
     $files=array();
@@ -58,7 +59,7 @@ function uploadImgs($filename="imgs",$path="/images/uploads"){
                     default :
                         break;
                 }
-                return  array("state"=>0,"error"=>$error_log);
+                return  Result::fail($error_log);
                 die ();
             } else {
                 $img_data[$i] = $_FILES[$filename]['tmp_name'][$i];
@@ -66,7 +67,7 @@ function uploadImgs($filename="imgs",$path="/images/uploads"){
                 $file_type[$i] = $size[$i]['mime'];
                 if (!in_array($file_type[$i], array('image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'))) {
                     $error_log = 'only allow jpg,png,gif';
-                    return array("state"=>0,"error"=>$error_log,"file_type"=>$file_type[$i],"img_data"=>$img_data[$i]);
+                    return Result::fail($error_log,1,null,["file_type"=>$file_type[$i],"img_data"=>$img_data[$i]]);
                     die ();
                 }
                 switch($file_type[$i]) {
@@ -84,7 +85,7 @@ function uploadImgs($filename="imgs",$path="/images/uploads"){
                 }
             }
             if (!is_file($img_data[$i])) {
-                return array("state"=>0,"error"=>"部分文件上传失败");
+                return Result::fail("部分文件上传失败");
                 die ();
             }
             $save_path=$path;
@@ -100,7 +101,7 @@ function uploadImgs($filename="imgs",$path="/images/uploads"){
             $savename = $save_path . '/' . $file;
             $result = move_uploaded_file( $img_data[$i], $savename );
             if ( ! $result || ! is_file( $savename ) ) {
-                return array("state"=>0,"error"=>"upload error");
+                return Result::fail("upload error");
                 die ();
             }
         }
@@ -124,7 +125,7 @@ function uploadImgs($filename="imgs",$path="/images/uploads"){
                 default :
                     break;
             }
-            return  array("state"=>0,"error"=>$error_log);
+            return  Result::fail($error_log);
             die ();
         } else {
             $img_data = $_FILES[$filename]['tmp_name'];
@@ -132,7 +133,7 @@ function uploadImgs($filename="imgs",$path="/images/uploads"){
             $file_type = $size['mime'];
             if (!in_array($file_type, array('image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'))) {
                 $error_log = 'only allow jpg,png,gif';
-                return array("state"=>0,"error"=>$error_log);
+                return Result::fail($error_log);
                 die ();
             }
             switch($file_type) {
@@ -150,7 +151,7 @@ function uploadImgs($filename="imgs",$path="/images/uploads"){
             }
         }
         if (!is_file($img_data)) {
-            return array("state"=>0,"error"=>"upload error");
+            return Result::fail("upload error");
             die ( );
         }
         $save_path=$path;
@@ -166,16 +167,16 @@ function uploadImgs($filename="imgs",$path="/images/uploads"){
         $save_filename = $save_path . '/' . $file;
         $result = move_uploaded_file($img_data, $save_filename );
         if ( ! $result || ! is_file( $save_filename ) ) {
-            return array("state"=>0,"error"=>"upload error");
+            return aResult::fail("upload error");
             die ();
         }
     }
-    return array("state"=>1,"files"=>$files,"f"=>$_FILES,"path"=>$path,"filename"=>$filename);
+    return Result::success($files,"",["f"=>$_FILES,"path"=>$path,"filename"=>$filename]);
 }
 
 function uploadFiles($filename="upload_file",$path="/uploads"){
     if (!isset($_FILES[$filename])) {
-        return array("state"=>0,"error"=>'无图片上传信息，或文件key设置错误',"f"=>$_FILES);
+        return Result::fail('无图片上传信息，或文件key设置错误',1,null,$_FILES);
         die ();
     }
     $files=array();
@@ -198,7 +199,7 @@ function uploadFiles($filename="upload_file",$path="/uploads"){
                     default :
                         break;
                 }
-                return  array("state"=>0,"error"=>$error_log);
+                return  Result::fail($error_log);
                 die ();
             } else {
                 $img_data[$i] = $_FILES[$filename]['tmp_name'][$i];
@@ -206,7 +207,7 @@ function uploadFiles($filename="upload_file",$path="/uploads"){
                 $extension=$extension_arr[count($extension_arr)-1];
             }
             if (!is_file($img_data[$i])) {
-                return array("state"=>0,"error"=>"部分文件上传失败");
+                return Result::fail("部分文件上传失败");
                 die ();
             }
             $save_path=$path;
@@ -223,7 +224,7 @@ function uploadFiles($filename="upload_file",$path="/uploads"){
             $savename = $save_path . '/' . $file;
             $result = move_uploaded_file( $img_data[$i], $savename );
             if ( ! $result || ! is_file( $savename ) ) {
-                return array("state"=>0,"error"=>"upload error");
+                return Result::fail("upload error");
                 die ();
             }
         }
@@ -245,7 +246,7 @@ function uploadFiles($filename="upload_file",$path="/uploads"){
                 default :
                     break;
             }
-            return  array("state"=>0,"error"=>$error_log);
+            return  Result::fail($error_log);
             die ();
         } else {
             $img_data = $_FILES[$filename]['tmp_name'];
@@ -253,7 +254,7 @@ function uploadFiles($filename="upload_file",$path="/uploads"){
             $extension=$extension_arr[count($extension_arr)-1];
         }
         if (!is_file($img_data)) {
-            return array("state"=>0,"error"=>"upload error");
+            return Result::fail("upload error");
             die ( );
         }
         $save_path=$path;
@@ -270,11 +271,11 @@ function uploadFiles($filename="upload_file",$path="/uploads"){
         $save_filename = $save_path . '/' . $file;
         $result = move_uploaded_file($img_data, $save_filename );
         if ( ! $result || ! is_file( $save_filename ) ) {
-            return array("state"=>0,"error"=>"upload error");
+            return Result::fail("upload error");
             die ();
         }
     }
-    return array("state"=>1,"files"=>$files,"f"=>$_FILES,"path"=>$path,"filename"=>$filename);
+    return Result::success($files,"",["f"=>$_FILES,"path"=>$path,"filename"=>$filename]);
 }
 function gethref($url="",$params=[]){
     // gethref(array("./notes.php",array("page"=>now+1)));
