@@ -10,8 +10,9 @@ include_once __DIR__."/user/user.php";
 include_once __DIR__."/tag/tag.php";
 include_once __DIR__."/config/config.php";
 include_once __DIR__."/databack/databack.php";
+include_once __DIR__."/banner/banner.php";
 class Ajax extends Controller{
-    use nav\nav,art\art,user\user,tag\tag,config\config,databack\databack;
+    use nav\nav,art\art,user\user,tag\tag,config\config,databack\databack,banner\banner;
     public function __construct(){
         // echo "construct";
     }
@@ -21,7 +22,7 @@ class Ajax extends Controller{
         "except"=>[
           "login",
           "reg",
-          "ceshi"
+          "ceshi",
         ]
       ]
     ];

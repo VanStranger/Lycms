@@ -1,8 +1,5 @@
 <?php
 use \ly\lib\Result as Result;
-function res(){
-
-}
 function curlhtml($url){
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_POST, 0);

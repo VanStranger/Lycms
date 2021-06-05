@@ -27,7 +27,7 @@
   <div class="lbox">
     <div class="ad whitebg">
       <div class="pcd_ad">
-        {dede:myad name='1'/}
+        预留广告位
       </div>
     </div>
     <div class="content_box whitebg">
@@ -46,7 +46,7 @@
           }  
           ?>
         </p>
-        <p class="share"><b>转载：</b>感谢您对网站平台的认可，以及对我们原创作品以及文章的青睐，非常欢迎各位朋友分享到个人站长或者朋友圈，但转载请说明文章出处“来源演示站”。</p>
+        <p class="share"><b>声明：</b>本站内容列表内容均搬运自网络，不代表本人观点与立场。读者请自行阅读理解。</p>
         <div class="nextinfo">
           <?php
           if($data['prev']){
@@ -76,7 +76,7 @@
     </div>
     <div class="ad whitebg">
       <div class="pcd_ad">
-        {dede:myad name='1'/}
+        预留广告位
       </div>
     </div>
     <div class="whitebg">
@@ -125,7 +125,7 @@
       </ul>
     </div>
     <div class="ad whitebg imgscale">
-      {dede:myad name='1'/}
+      预留广告位
     </div>
     <div class="whitebg tuijian">
       <h2 class="htitle">点击排行</h2>
@@ -148,7 +148,7 @@
       </ul>
     </div>
     <div class="ad whitebg imgscale">
-      {dede:myad name='1'/}
+      预留广告位
     </div>
     <div class="whitebg cloud">
       <h2 class="htitle">标签云</h2>

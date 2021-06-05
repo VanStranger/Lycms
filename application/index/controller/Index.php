@@ -17,7 +17,7 @@ class Index extends Controller{
             $config[$value['key']]=$value['val'];
         }
         $config['img0']="";
-        $this->navs=DB::table("nav")->select();
+        $this->navs=DB::table("nav")->order("weight desc,id asc")->select();
         $links=DB::table("links")->select();
         $tags=DB::table("tag")->select();
         $art_count=DB::table("article")->count();
@@ -240,7 +240,7 @@ class Index extends Controller{
         // return $a;
         set_time_limit(0);
         $db=include LY_BASEPATH . "/config/database.php";
-        $path=LY_BASEPATH . "databack";
+        $path=LY_BASEPATH . "databack".DIRECTORY_SEPARATOR.date("Y_m_d_H_i_s");
         $contpath=$path.DIRECTORY_SEPARATOR."tables";
         if(!is_dir($path)){
             mkdir($path,0755);
@@ -248,41 +248,49 @@ class Index extends Controller{
         if(!is_dir($contpath)){
             mkdir($contpath,0755);
         }
-        $filename=date("Y_m_d_H_i_s") . ".sql";
-        $file=fopen($path.DIRECTORY_SEPARATOR.$filename,"w+");
+        $file=fopen($path.DIRECTORY_SEPARATOR."widthoutdata.sql","w+");
         $cont="";
         $tables=DB::query("show tables");
-        $cont.="CREATE DATABASE IF NOT EXISTS `".$db['db']['database']."`;\r\nUSE `".$db['db']['database']."`;\r\n";
+        $cont.="CREATE DATABASE IF NOT EXISTS `".$db['db']['database']."`DEFAULT CHARSET ".$db['db']['charset']." COLLATE ".($db['db']['charset']==="utf8"?"utf8_general_mysql500_ci":"gbk_chinese_ci").";\r\nUSE `".$db['db']['database']."`;\r\n";
         foreach ($tables as $key => $value) {
             $table=$value['Tables_in_dx'];
-            $cont.="DROP TABLE IF EXISTS `$table`";
+            $cont.="DROP TABLE IF EXISTS `$table`;\r\n";
             $createTable=DB::query("show create table $table");
             $cont.=$createTable[0]['Create Table'].";\r\n";
             $data=DB::table($table)->select();
         }
-        echo $cont;
         fwrite($file,$cont);
         fclose($file);
+        $tablescont="";
         foreach ($tables as $key => $value) {
             $table=$value['Tables_in_dx'];
             $data=DB::table($table)->select();
             if($data){
-                $tablefile=fopen($path.DIRECTORY_SEPARATOR.$table.'.sql','w+');
+                $tablefile=fopen($contpath.DIRECTORY_SEPARATOR.$table.'.sql','w+');
                 $tablecont="INSERT INTO `".$table."` VALUES \r\n";
                 foreach ($data as $key => $value) {
                     $tablecont.="(";
                     foreach ($value as $k => $v) {
-                        $tablecont.=(is_numeric($v)?$v:'"'.$v.'"') .",";
+                        if(is_numeric($v)){
+                            $tablecont.=$v.",";
+                        }else{
+                            $str=str_replace("'", "\'", $str);
+                            $tablecont.='\''.$v.'\'' .",";
+                        }
                     }
-                    $tablecont=substr($tablecont,0,-1)."),";
+                    $tablecont=substr($tablecont,0,-1)."),\r\n";
                 }
-                $tablecont=substr($tablecont,0,-1).";\r\n";
-                echo $tablecont;
+                $tablecont=substr($tablecont,0,-3).";\r\n";
+                $tablescont.=$tablecont;
                 fwrite($tablefile,$tablecont);
                 fclose($tablefile);
             }
         }
-        
+        $datafile=fopen($path.DIRECTORY_SEPARATOR."widthdata.sql","w+");
+        fwrite($datafile,$cont);
+        fwrite($datafile,$tablescont);
+        fclose($datafile);
+        return ['code'=>0];
 
     }
 }

@@ -72,7 +72,7 @@
       </ul>
     </div>
     <div class="ad whitebg imgscale">
-      {dede:myad name='1'/}
+      预留广告位
     </div>
     <div class="whitebg tuijian">
       <h2 class="htitle">点击排行</h2>
@@ -95,7 +95,7 @@
       </ul>
     </div>
     <div class="ad whitebg imgscale">
-      {dede:myad name='1'/}
+      预留广告位
     </div>
     <div class="whitebg cloud">
       <h2 class="htitle">标签云</h2>
