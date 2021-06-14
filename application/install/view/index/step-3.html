@@ -181,24 +181,24 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label">管理员账号</label>
 								<div class="col-sm-4">
-									<input name="adminuser" type="text" value="admin" class="form-control" />
+									<input id="adminuser" name="adminuser" type="text" value="admin" class="form-control" />
 								</div>
 								<p><small>只能用'0-9'、'a-z'、'A-Z'、'.'、'@'、'_'、'-'、'!'以内范围的字符</small></p>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label">管理员密码</label>
 								<div class="col-sm-4">
-									<input name="adminpwd" type="text" value="admin" class="form-control" />
+									<input id="adminpwd" name="adminpwd" type="text" value="admin" class="form-control" />
 								</div>
 							</div>
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label class="col-sm-2 control-label">Cookie加密码</label>
 								<div class="col-sm-4">
 									<input name="cookieencode" type="text" value="<?php echo $rnd_cookieEncode; ?>"
 										class="form-control" />
 								</div>
 
-							</div>
+							</div> -->
 						</div>
 					</div>
 
@@ -344,8 +344,14 @@
 
 	function DoInstall() {
 		var dbname = $o('dbname').value;
+		var adminuser = $o('adminuser').value;
+		var adminpwd = $o('adminpwd').value;
 		if(db && dbname){
-			document.form1.submit();
+			if(adminuser && adminpwd){
+				document.form1.submit();
+			}else{
+				alert("请先后台管理员信息")
+			}
 		}else{
 			alert("请先正确配置数据库信息")
 		}

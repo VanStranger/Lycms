@@ -14,9 +14,9 @@ class Index extends Controller{
         
     }
     public function index(){
-        if(file_exists("./static/install/install_lock.txt")){
-            return "系统已安装，如需重新安装，请删除安装锁文件。";
-        }
+        // if(file_exists("./static/install/install_lock.txt")){
+        //     return "系统已安装，如需重新安装，请删除安装锁文件。";
+        // }
         $step=input("step");
         $tempname="step-1";
         switch ($step) {
@@ -52,9 +52,9 @@ class Index extends Controller{
                 break;
             case '4':
                 
-                // $file=fopen("./static/install/install_lock.txt","a+");
-                // fwrite($file,"安装锁，重新安装时删除此文件。");
-                // fclose($file);
+                $file=fopen("./static/install/install_lock.txt","a+");
+                fwrite($file,"安装锁，重新安装时删除此文件。");
+                fclose($file);
                 
                 $tempname="step-4";
                 $res=$this->createDatabase();
@@ -126,6 +126,8 @@ class Index extends Controller{
         $dbuser=input("dbuser");
         $dbpwd=input("dbpwd");
         $dbprefix=input("dbprefix","");
+        $adminuser=input("adminuser","");
+        $adminpwd=input("adminpwd","");
         try {
             $pdo = new \PDO(
                 'mysql:host=' . $dbhost . ';port=' . $dbport . ';charset=' . $dblang.';',
@@ -192,24 +194,32 @@ class Index extends Controller{
                 fclose($file);
                 $sqls=file_get_contents("./static/install/sql.sql");
                 $sqls=preg_replace("/--\s.+?\r\n/","",$sqls);
-                $sqls=preg_replace("/\/*!\s.+\*\/;\r\n/","",$sqls);
+                $sqls=preg_replace("/\/\*\!.+?\*\/;\r\n/","",$sqls);
                 if(input("dbprefix","")){
                     $sqls=str_replace("DROP TABLE IF EXISTS `","DROP TABLE IF EXISTS `".input("dbprefix",""),$sqls);
                     $sqls=str_replace("CREATE TABLE IF NOT EXISTS `","CREATE TABLE IF NOT EXISTS `".input("dbprefix",""),$sqls);
+                    $sqls=str_replace("DELETE FROM `","DELETE FROM `".input("dbprefix",""),$sqls);
+                    $sqls=str_replace("INSERT INTO `","INSERT INTO `".input("dbprefix",""),$sqls);
                 }
                 if(count($sqls)){
-                    $sqlsarr=explode(";",$sqls);
+                    $sqlsarr=explode(";\r\n",$sqls);
                     try {
                         foreach ($sqlsarr as $key => $sql) {
                             $sql=preg_replace("/\r\n|\t|\s{2,}/","",$sql);
                             if($sql){
+                                // if(strtolower(substr($sql,0,5))==="insert"){
+                                //     $sql=addslashes($sql);
+                                // }
                                 DB::query($sql);
                             }
                         }
+                        DB::query("INSERT INTO `".input("dbprefix","")."user` (`id`, `rid`, `password`, `username`, `loginname`, `sex`, `photo`, `email`, `userinfo`, `token`, `view`, `guanzhu`, `lastlogin`) VALUES(1, 1, ?, '管理员', ?, 0, '/uploads/photos/0.jpg', 'f@126.com', '', ?, 0, 0, ?)",[md5($adminpwd),$adminuser,md5(time()),time()]);
+                        return ['code'=>1];
                     } catch (\Throwable $create_tables) {
-                        return ['code'=>0,"msg"=>"创建数据表失败","info"=>$create_tables->getMessage(),"sqls"=>$sqls];
+                        return ['code'=>0,"msg"=>"创建数据表失败","info"=>$create_tables->getMessage(),"sql"=>$sql];
                     }
                 }
+
             } catch (\Throwable $create_file) {
                 return ['code'=>0,"msg"=>"写入数据库配置文件失败"];
             }           
@@ -217,5 +227,11 @@ class Index extends Controller{
             return ['code'=>0,"msg"=>"数据库连接失败","info"=>$conn->getMessage()];            
         }
         
+    }
+    public function ceshi(){
+        $sqls=file_get_contents("./static/install/sql.sql");
+                $sqls=preg_replace("/--\s.+?\r\n/","",$sqls);
+                $sqls=preg_replace("/\/\*\!.+?\*\/;\r\n/","",$sqls);
+                return $sqls;
     }
 }

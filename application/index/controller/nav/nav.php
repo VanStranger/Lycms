@@ -47,6 +47,7 @@ trait nav
 
     }
     public function editNavCont($navid,$content=""){
+        $content=htmlspecialchars_decode($content);
         if($navid){
             $nav=DB::table("nav_art")->where("navid",$navid)->find();
             if($nav){

@@ -299,8 +299,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- 正在导出表  dx.user 的数据：~0 rows (大约)
 DELETE FROM `user`;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` (`id`, `rid`, `password`, `username`, `loginname`, `sex`, `photo`, `email`, `userinfo`, `token`, `view`, `guanzhu`, `lastlogin`) VALUES
-  (1, 1, 'bf1ea62e0381a59b80ff5026467689a7', '管理员', 'admin', 0, '/uploads/photos/0.jpg', 'f@126.com', '', 'e96608c504659eff2623e6a4d2f5ba5d', 0, 0, 1623331488);
+-- INSERT INTO `user` (`id`, `rid`, `password`, `username`, `loginname`, `sex`, `photo`, `email`, `userinfo`, `token`, `view`, `guanzhu`, `lastlogin`) VALUES
+--   (1, 1, 'bf1ea62e0381a59b80ff5026467689a7', '管理员', 'admin', 0, '/uploads/photos/0.jpg', 'f@126.com', '', 'e96608c504659eff2623e6a4d2f5ba5d', 0, 0, 1623331488);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

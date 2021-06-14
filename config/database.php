@@ -4,11 +4,11 @@
       "type"=>"mysql",
       "host"=>"localhost",
       "username"=>"root",
-      "password"=>"br13jHhrh7-1",
-      "database"=>"dx",
+      "password"=>"root",
+      "database"=>"da",
       "hostport"=>"3306",
       "charset"=>"utf8",
-      "prefix"=>"",
+      "prefix"=>"lycms_",
     ]
   ];
 ?>

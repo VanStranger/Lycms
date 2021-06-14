@@ -1,4 +1,5 @@
 <?php
+header("Content-type:text/html;charset=utf-8");
 date_default_timezone_set('PRC');
 define("LY_BASEPATH", dirname(__DIR__).DIRECTORY_SEPARATOR);
 chdir(dirname(__DIR__).DIRECTORY_SEPARATOR."public");
