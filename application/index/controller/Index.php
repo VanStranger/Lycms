@@ -76,7 +76,7 @@ class Index extends Controller{
         ->join("nav","article.nid=nav.id","left")
         ->field("article.*,nav.title as nav")
         ->order("view desc")
-        ->limit(20)
+        ->limit(10)
         ->select();
         $this->data['arts_view']=$arts_view;
         
@@ -151,7 +151,7 @@ class Index extends Controller{
         ->select();
         $arts_view=DB::table("article")
         ->where("nid",$nid)
-        ->order("update_time desc")
+        ->order("view desc")
         ->limit(9)
         ->select();
         $this->data['arts_nav']=$arts_nav;
@@ -168,25 +168,32 @@ class Index extends Controller{
         $tag=DB::table("tag")->where("id",$id)->find();
         $this->data['tag']=$tag;
         $arts=DB::table("article")
-        ->where("nid",$id)
+        ->join("art_tag","article.id=art_tag.artid","inner")
+        ->join("nav","article.nid=nav.id","left")
+        ->field("article.*,nav.title as nav")
+        ->where("art_tag.tagid",$id)
         ->limit(($page-1)*$size,$size)
         ->select();
         $this->data['arts']=$arts;
-        $artsnum=DB::table("article")->where("nid",$id)->count();
+        $artsnum=DB::table("article")
+        ->join("art_tag","article.id=art_tag.artid","inner")
+        ->field("article.*")->where("art_tag.tagid",$id)->count();
         $maxpage=ceil($artsnum/$size)?:1;
         $this->data['maxpage']=$maxpage;
         $arts_nav=DB::table("article")
         ->join("art_tag","article.id=art_tag.artid","inner")
-        ->field("article.*")
+        ->join("nav","article.nid=nav.id","left")
+        ->field("article.*,nav.title as nav")
         ->where("art_tag.tagid",$id)
         ->order("create_time desc")
         ->limit(9)
         ->select();
         $arts_view=DB::table("article")
         ->join("art_tag","article.id=art_tag.artid","inner")
-        ->field("article.*")
+        ->join("nav","article.nid=nav.id","left")
+        ->field("article.*,nav.title as nav")
         ->where("art_tag.tagid",$id)
-        ->order("update_time desc")
+        ->order("view desc")
         ->limit(9)
         ->select();
         $this->data['arts_nav']=$arts_nav;
@@ -223,7 +230,7 @@ class Index extends Controller{
         $arts_view=DB::table("article")
         ->join("art_tag","article.id=art_tag.artid","inner")
         ->field("article.*")
-        ->order("update_time desc")
+        ->order("article.view desc")
         ->limit(9)
         ->select();
         $this->data['arts_view']=$arts_view;

@@ -11,8 +11,9 @@ include_once __DIR__."/tag/tag.php";
 include_once __DIR__."/config/config.php";
 include_once __DIR__."/databack/databack.php";
 include_once __DIR__."/banner/banner.php";
+include_once __DIR__."/role/role.php";
 class Ajax extends Controller{
-    use nav\nav,art\art,user\user,tag\tag,config\config,databack\databack,banner\banner;
+    use nav\nav,art\art,user\user,tag\tag,config\config,databack\databack,banner\banner,role\role;
     public function __construct(){
         // echo "construct";
     }

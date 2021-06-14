@@ -12,7 +12,7 @@ trait user
     {
         $user = DB::table("user")
             ->join("role", "user.rid=role.id", "left")
-            ->field("user.id,username,loginname,token,role.title as role")
+            ->field("user.id,username,loginname,token,role.title as role,role.permit")
             ->where(['loginname' => $loginname, "password" => md5($password)])->find();
         if (!$user) {
             return Result::fail("用户名或密码不正确");
@@ -47,7 +47,6 @@ trait user
     {
         $navs = DB::table("user")->select();
         return Result::success($navs);
-
     }
     public function updateUser($user)
     {
@@ -65,7 +64,7 @@ trait user
             return Result::fail();
         }
     }
-    public function delUser($ids = [])
+    public function removeUser($ids = [])
     {
         if ($ids) {
             $idstr = "(" . implode(",", $ids) . ")";

@@ -3,17 +3,19 @@
   $data=$ly->execute("/index/index/tags");
 ?>
 <!doctype html>
-<html>
+<html lang="zh">
+<?php include "./tongji.php";?>
 <head>
 <meta charset="utf-8">
 <title>标签列表_<?php echo $data['global']['webname'];?></title>
-<meta name="keywords" content="{dede:field name='keywords'/}" />
-<meta name="description" content="{dede:field name='description' function='html2text(@me)'/}" />
+<meta name="keywords" content="<?php echo $data['global']['keywords'];?>" />
+<meta name="description" content="<?php echo $data['global']['description'];?>" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="<?php echo $data['global']['cmspath'];?>skin/css/base.css" rel="stylesheet">
 <link href="<?php echo $data['global']['cmspath'];?>skin/css/m.css" rel="stylesheet">
 <script src="<?php echo $data['global']['cmspath'];?>skin/js/jquery-1.8.3.min.js" ></script>
 <script src="<?php echo $data['global']['cmspath'];?>skin/js/comm.js"></script>
+<link rel="icon" href="favicon.png"  type="image/x-icon">
 <!--[if lt IE 9]>
 <script src="<?php echo $data['global']['cmspath'];?>skin/js/modernizr.js"></script>
 <![endif]-->

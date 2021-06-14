@@ -3,17 +3,19 @@
   $data=$ly->execute("/index/index/nav");
 ?>
 <!doctype html>
-<html>
+<html lang="zh">
+<?php include "./tongji.php";?>
 <head>
 <meta charset="utf-8">
-<title>{dede:field.title/}_<?php echo $data['global']['webname'];?></title>
-<meta name="keywords" content="{dede:field name='keywords'/}" />
-<meta name="description" content="{dede:field name='description' function='html2text(@me)'/}" />
+<title><?php echo $data['nav']['title'];?>_<?php echo $data['global']['webname'];?></title>
+<meta name="keywords" content="<?php echo $data['global']['keywords'];?>" />
+<meta name="description" content="<?php echo $data['global']['description'];?>" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="<?php echo $data['global']['cmspath'];?>skin/css/base.css" rel="stylesheet">
 <link href="<?php echo $data['global']['cmspath'];?>skin/css/m.css" rel="stylesheet">
 <script src="<?php echo $data['global']['cmspath'];?>skin/js/jquery-1.8.3.min.js" ></script>
 <script src="<?php echo $data['global']['cmspath'];?>skin/js/comm.js"></script>
+<link rel="icon" href="favicon.png"  type="image/x-icon">
 <!--[if lt IE 9]>
 <script src="<?php echo $data['global']['cmspath'];?>skin/js/modernizr.js"></script>
 <![endif]-->
@@ -40,7 +42,7 @@
         
           <li>
             <h3 class="blogtitle"><a href="./art.php?id=<?php echo $value['id'];?>&nid=<?php echo $value['nid'];?>"><?php echo $value['title'];?></a></h3>
-            <span class="blogpic imgscale"><i><a href="./list.php?id=<?php echo $value['nid'];?>"><?php echo $value['nav'];?></a></i><a href="./art.php?id=<?php echo $value['id'];?>&nid=<?php echo $value['nid'];?>" title="<?php echo $value['title'];?>"><img src="<?php echo count($preimgs)?$preimgs[0]:$data['global']['img0'];?>" alt="<?php echo $value['title'];?>"></a></span>
+            <span class="blogpic imgscale"><i><a href="./list.php?id=<?php echo $value['nid'];?>"><?php echo $value['nav'];?></a></i><a href="./art.php?id=<?php echo $value['id'];?>&nid=<?php echo $value['nid'];?>" title="<?php echo $value['title'];?>"><img src="<?php echo $value['preimg']?$value['preimg']:$data['global']['img0'];?>" alt="<?php echo $value['title'];?>"></a></span>
             <p class="blogtext"><?php echo $value['pre'];?>... </p>
             <p class="bloginfo"><span></span><span><?php echo date("Y-m-d",$value['update_time']);?></span><span>【<a href="./list.php?id=<?php echo $value['nid'];?>"><?php echo $value['nav'];?></a>】</span></p>
             <a href="./art.php?id=<?php echo $value['id'];?>&nid=<?php echo $value['nid'];?>" class="viewmore">阅读更多</a> </li>
@@ -58,10 +60,7 @@
     <div class="whitebg paihang">
       <h2 class="htitle">点击排行</h2>
       
-      <?php
-      $preimgs_now=json_decode($data['viewarts'][0]['preimg'],true);
-      ?>
-      <section class="topnews imgscale"><a href="./art.php?id=<?php echo $data['viewarts'][0]['id'];?>"><img src="<?php echo $preimgs_now[0];?>"><span><?php echo $data['viewarts'][0]['title'];?></span></a></section>
+      <section class="topnews imgscale"><a href="./art.php?id=<?php echo $data['viewarts'][0]['id'];?>"><img src="<?php echo $data['viewarts'][0]['preimg'];?>"><span><?php echo $data['viewarts'][0]['title'];?></span></a></section>
       <ul>
         <?php 
         foreach ($data['viewarts'] as $key => $value) {

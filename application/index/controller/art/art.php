@@ -54,6 +54,7 @@ trait art
                 $artid=$article['id'];
             }else{
                 $article['create_time']=time();
+                $article['update_time']=time();
                 $edit=DB::table("article")
                 ->insertEntity($article);
                 $artid=DB::lastInsertId();

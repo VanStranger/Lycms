@@ -3,17 +3,19 @@
   $data=$ly->execute("/index/index/art");
 ?>
 <!doctype html>
-<html>
+<html lang="zh">
+<?php include "./tongji.php";?>
 <head>
 <meta charset="utf-8">
 <title><?php echo $data['art']['title'];?>_<?php echo $data['global']['webname'];?></title>
-<meta name="keywords" content="{dede:field.keywords/}" />
-<meta name="description" content="{dede:field.description function='html2text(@me)'/}" />
+<meta name="keywords" content="<?php echo $data['global']['keywords'];?>" />
+<meta name="description" content="<?php echo $data['global']['description'];?>" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="<?php echo $data['global']['cmspath'];?>skin/css/base.css" rel="stylesheet">
 <link href="<?php echo $data['global']['cmspath'];?>skin/css/m.css" rel="stylesheet">
 <script src="<?php echo $data['global']['cmspath'];?>skin/js/jquery-1.8.3.min.js" ></script>
 <script src="<?php echo $data['global']['cmspath'];?>skin/js/comm.js"></script>
+<link rel="icon" href="favicon.png"  type="image/x-icon">
 <!--[if lt IE 9]>
 <script src="<?php echo $data['global']['cmspath'];?>skin/js/modernizr.js"></script>
 <![endif]-->
@@ -33,7 +35,7 @@
     <div class="content_box whitebg">
       <h2 class="htitle"><span class="con_nav">您现在的位置是：<a href="/">首页</a>><a href="./list.php?id=<?php echo $data['nav']['id'];?>"><?php echo $data['nav']['title'];?></a></h2>
       <h1 class="con_tilte"><?php echo $data['art']['title'];?></h1>
-      <p class="bloginfo"><span>{<?php echo date("Y-m-d",$data['art']['create_time']);?></span><span> <a href="./list.php?id=<?php echo $data['nav']['id'];?>"><?php echo $data['nav']['title'];?></a> </span><span><?php echo $data['art']['view'];?>次浏览</span></p>
+      <p class="bloginfo"><span><?php echo date("Y-m-d",$data['art']['create_time']);?></span><span> <a href="./list.php?id=<?php echo $data['nav']['id'];?>"><?php echo $data['nav']['title'];?></a> </span><span><?php echo $data['art']['view'];?>次浏览</span></p>
       <p class="con_info"><b>简介</b><?php echo $data['art']['pre'];?>...</p>
       <div class="con_text"> <?php echo $data['art']['content'];?>
         <div class="pagelist"></div>
@@ -51,7 +53,7 @@
           <?php
           if($data['prev']){
             ?>
-          <p>上一篇：<a href="./art.php?id=<?php echo $data['prev']['id'];?>&nid=<?php echo $data['prev']['nid'];?>"></a></p>
+          <p>上一篇：<a href="./art.php?id=<?php echo $data['prev']['id'];?>&nid=<?php echo $data['prev']['nid'];?>"><?php echo $data['prev']['title'];?></a></p>
             <?php
           }else{
             ?>
@@ -62,7 +64,7 @@
           <?php
           if($data['next']){
             ?>
-          <p>下一篇：<a href="./art.php?id=<?php echo $data['next']['id'];?>&nid=<?php echo $data['next']['nid'];?>"></a></p>
+          <p>下一篇：<a href="./art.php?id=<?php echo $data['next']['id'];?>&nid=<?php echo $data['next']['nid'];?>"><?php echo $data['next']['title'];?></a></p>
             <?php
           }else{
             ?>
@@ -127,7 +129,7 @@
     <div class="ad whitebg imgscale">
       预留广告位
     </div>
-    <div class="whitebg tuijian">
+    <div class="whitebg paihang">
       <h2 class="htitle">点击排行</h2>
       <?php
       $preimgs_now=json_decode($data['arts_view'][0]['preimg'],true);

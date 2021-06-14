@@ -2,14 +2,14 @@
   <div class="box">
     <div class="wxbox">
       <ul>
-        <li><img src="<?php echo $data['global']['cmspath'];?>skin/images/weixin.png"><span>微信公众号</span></li>
+        <li><img src="<?php echo $data['global']['cmspath'];?>skin/images/weixin.jpg"><span>微信公众号</span></li>
       </ul>
     </div>
     <div class="endnav">
       <p><b>站点声明：</b></p>
-      <p>1、本站个人博客模板，均为杨青青本人设计，个人可以使用，但是未经许可不得用于任何商业目的。</p>
-      <p>2、所有文章未经授权禁止转载、摘编、复制或建立镜像，如有违反，追究法律责任。举报邮箱：<a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=<?php echo $data['global']['cfg_email'];?>" target="_blank"><?php echo $data['global']['cfg_email'];?></a></p>
-      <p><?php echo $data['global']['cfg_powerby'];?> 备案号：<a href="http://www.beian.miit.gov.cn/"><?php echo $data['global']['cfg_beian'];?></a></p>
+      <p>1、本站内容均搬运自网络，安全起见个人不予评鉴，也不开评论。</p>
+      <p>2、本站接受投稿，投稿邮箱：godlikeshows@126.com</p>
+      <p><?php echo $data['global']['cfg_powerby'];?> 备案号：<a href="https://beian.miit.gov.cn/" target="_blank"><?php echo $data['global']['beian'];?></a></p>
     </div>
   </div>
   <a href="#">

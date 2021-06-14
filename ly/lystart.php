@@ -1,5 +1,5 @@
 <?php
-//应用的根目录就是index.php的父目录
+date_default_timezone_set('PRC');
 define("LY_BASEPATH", dirname(__DIR__).DIRECTORY_SEPARATOR);
 chdir(dirname(__DIR__).DIRECTORY_SEPARATOR."public");
 !defined("APP_PATH") && define("APP_PATH","application");

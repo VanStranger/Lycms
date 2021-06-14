@@ -428,7 +428,7 @@ nav {
 	-o-transition: all .5s ease;
 	transition: all .5s ease;
 	transition: all 0.5s;
-	opacity: .7;
+	opacity: .3;
 }
 .headline ul li:hover img {
 	transform: scale(1.1);
@@ -1192,6 +1192,27 @@ a.iconfont.icon-weixin {
 }
 .paihang ul li:nth-child(8) i::before {
 	content: "8";
+}
+.paihang ul li:nth-child(9) i::before {
+	content: "9";
+}
+.paihang ul li:nth-child(10) i::before {
+	content: "10";
+}
+.paihang ul li:nth-child(11) i::before {
+	content: "11";
+}
+.paihang ul li:nth-child(12) i::before {
+	content: "12";
+}
+.paihang ul li:nth-child(13) i::before {
+	content: "13";
+}
+.paihang ul li:nth-child(14) i::before {
+	content: "14";
+}
+.paihang ul li:nth-child(15) i::before {
+	content: "15";
 }
 .paihang ul li:hover {
 	-moz-transition: all .2s ease;

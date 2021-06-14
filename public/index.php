@@ -4,6 +4,7 @@
 ?>
 <!doctype html >
 <html lang="zh">
+<?php include "./tongji.php";?>
 <head>
 <meta charset="utf-8">
 <title><?php echo $data['global']['webname'];?></title>
@@ -14,6 +15,7 @@
 <link href="/skin/css/m.css" rel="stylesheet">
 <script src="/skin/js/jquery-1.8.3.min.js" ></script>
 <script src="/skin/js/comm.js"></script>
+<link rel="icon" href="favicon.png"  type="image/x-icon">
 <!--[if lt IE 9]>
 <script src="<?php echo $data['global']['cmspath'];?>skin/js/modernizr.js"></script>
 <![endif]-->
@@ -56,7 +58,7 @@
           ?>
         <li>
           <a href="./art.php?id=<?php echo $value['id'];?>&nid=<?php echo $value['nid'];?>">
-            <img src="<?php echo count($preimgs)?$preimgs[0]:$data['global']['img0'];?>" alt="<?php echo $value['title'];?>">
+            <img src="<?php echo $value['preimg']?$value['preimg']:$data['global']['img0'];?>" alt="<?php echo $value['title'];?>">
             <span><?php echo $value['title'];?></span>
           </a>
         </li>
@@ -67,7 +69,7 @@
     </div>
     <!--headline end-->
     <div class="clearblank"></div>
-    <div class="tab_box whitebg">
+    <!-- <div class="tab_box whitebg">
       <div class="tab_buttons">
         <ul>
           <?php 
@@ -96,7 +98,7 @@
                  foreach ($v['arts_withimg'] as $k => $v) {
                    $preimgs=json_decode($value['preimgs'],true);
                     ?>
-                    <li><a href="./art.php?id=<?php echo $v['id'];?>"><img src="<?php echo count($preimgs)?$preimgs[0]:$data['global']['img0'];?>"><span><?php echo $v['title'];?></span></a></li>
+                    <li><a href="./art.php?id=<?php echo $v['id'];?>"><img src="<?php echo $value['preimg']?$value['preimg']:$data['global']['img0'];?>"><span><?php echo $v['title'];?></span></a></li>
                     <?php
                  }
                  ?>
@@ -123,7 +125,7 @@
         }
         ?>
       </div>
-    </div>
+    </div> -->
     
     <!--tab_box end-->
     <!-- <div class="zhuanti whitebg">
@@ -134,9 +136,9 @@
         {/dede:arclist}
       </ul>
     </div> -->
-    <div class="ad whitebg">
+    <!-- <div class="ad whitebg">
       
-    </div>
+    </div> -->
     <div class="whitebg bloglist">
       <h2 class="htitle">最新博文</h2>
       <ul>
@@ -146,7 +148,7 @@
           ?>
           <li>
             <h3 class="blogtitle"><a href="./art.php?id=<?php echo $value['id'];?>&nid=<?php echo $value['nid'];?>"><?php echo $value['title'];?></a></h3>
-            <span class="blogpic imgscale"><i><a href="./list.php?id=<?php echo $value['nid'];?>"><?php echo $value['nav'];?></a></i><a href="./art.php?id=<?php echo $value['id'];?>&nid=<?php echo $value['nid'];?>" title="<?php echo $value['title'];?>"><img src="<?php echo count($preimgs)?$preimgs[0]:$data['global']['img0'];?>" alt="<?php echo $value['title'];?>"></a></span>
+            <span class="blogpic imgscale"><i><a href="./list.php?id=<?php echo $value['nid'];?>"><?php echo $value['nav'];?></a></i><a href="./art.php?id=<?php echo $value['id'];?>&nid=<?php echo $value['nid'];?>" title="<?php echo $value['title'];?>"><img src="<?php echo $value['preimg']?$value['preimg']:$data['global']['img0'];?>" alt="<?php echo $value['title'];?>"></a></span>
             <p class="blogtext"><?php echo $value['pre'];?>... </p>
             <p class="bloginfo"><span></span><span><?php echo date("Y-m-d",$value['update_time']);?></span><span>【<a href="./list.php?id=<?php echo $value['nid'];?>"><?php echo $value['nav'];?></a>】</span></p>
             <a href="./art.php?id=<?php echo $value['id'];?>&nid=<?php echo $value['nid'];?>" class="viewmore">阅读更多</a> </li>
